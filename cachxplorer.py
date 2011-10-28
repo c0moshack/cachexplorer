@@ -5,9 +5,12 @@ import os
 def directory_parser(d):
 ## Search Firefox cache directory for files
   flist = []
+  folderCount = 0
   for top, dirs, files in os.walk(d):
+    folderCount += len(dirs)
     for nm in files:      
       flist.append(os.path.join(top, nm))
+  print folderCount, "directories scanned\n"
   return flist
 
 def mime_extractor(files):
