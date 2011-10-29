@@ -1,6 +1,8 @@
 #!/usr/bin/python
-import sys
+#import sys
 import os
+#import optparse
+import argparse
 
 def directory_parser(d):
 ## Search Firefox cache directory for files
@@ -34,23 +36,34 @@ def splitter(string):
     return res
 
 def main():
-  if len(sys.argv) == 2 :
-    print "Usage: firecache.py -f <path to file>"
-  elif sys.argv[1] == "--help":
-    print "Usage: firecache.py <option> <file>\
-    Valid Options:\
-    --help\
-    --file\
-    --full"
-  elif sys.argv[1] == "--file":
+  # Define available options
+  oparser = argparse.ArgumentParser(usage="%prog [options] arg")
+  oparser.add_argument("-f", "--file", dest="file", help = "scan single file", metavar="file")
+  oparser.add_argument("-F", "--full", dest="full", help = "recursively scan a directory", metavar="full")
+  oparser.add_argument("-v", "--verbose", action="store_true", dest="verbose")
+  oparser.add_argument("-q", "--quiet", action="store_false", dest="verbose")
+  
+  args = oparser.parse_args()
+  
+  #Check if verbose option was set
+  if args.verbose == True :
+    if args.file:
+      print "Scanning...%s" % args.file
+    if args.full:
+      print "Scanning...%s" % args.full
+  
+  #Check if scanning single file    
+  if args.file != None:
     print "Checking file for MIME type"
-  elif sys.argv[1] == "--full":
-    print "Scanning cache directory"
-    mimedict = mime_extractor(directory_parser(sys.argv[2]))
+  
+  #Check if scanning directory
+  if args.full != None:
+    print "Scanning cache directory", args.full
+    mimedict = mime_extractor(directory_parser(args.full))
     for k in mimedict.keys():
-      print "File at", k , "is of type", mimedict[k]
-  else:
-    print "Invalid option"
+      print "----"
+      print "File:", k 
+      print "Type:", mimedict[k].strip()
 
 if __name__ == '__main__':
-  main()
+  main()  
