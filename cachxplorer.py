@@ -37,12 +37,12 @@ def splitter(string):
 
 def main():
   # Define available options
-  oparser = argparse.ArgumentParser(usage="%prog [options] arg")
+  oparser = argparse.ArgumentParser(prog='cachexplorer.py', usage='%(prog)s [options]')
   oparser.add_argument("-f", "--file", dest="file", help = "scan single file", metavar="file")
   oparser.add_argument("-F", "--full", dest="full", help = "recursively scan a directory", metavar="full")
   oparser.add_argument("-v", "--verbose", action="store_true", dest="verbose")
   oparser.add_argument("-q", "--quiet", action="store_false", dest="verbose")
-  
+    
   args = oparser.parse_args()
   
   #Check if verbose option was set
